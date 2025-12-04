@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Pilihan Ganda</title>
+    <link href="./output.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div class="container max-w-2xl">
+       
+        <div id="welcomeScreen" class="bg-white rounded-2xl shadow-xl p-8 text-center">
+            <div class="mb-6">
+                <div class="w-20 h-20 bg-indigo-600 rounded-full mx-auto flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Quiz Pilihan Ganda</h1>
+                <p class="text-gray-600">Jawablah 5 pertanyaan ini dengan benar! (kalo gagal ngulang matkul)</p>
+            </div>
+            <button id="startBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
+                Start Quiz
+            </button>
+        </div>
+
+        
+        <div id="quizScreen" class="bg-white rounded-2xl shadow-xl p-8 hidden">
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm font-medium text-indigo-600" id="questionNumber">Pertanyaan 1/5</span>
+                    <span class="text-sm font-medium text-gray-600" id="scoreDisplay">B: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progressBar" class="bg-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 20%"></div>
+                </div>
+            </div>
+
+            <h2 id="questionText" class="text-xl font-semibold text-gray-800 mb-6"></h2>
+
+            <div id="optionsContainer" class="space-y-3 mb-6"></div>
+
+            <button id="nextBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 opacity-50 cursor-not-allowed" disabled>
+                Next >
+            </button>
+        </div>
+
+        
+        <div id="resultScreen" class="bg-white rounded-2xl shadow-xl p-8 text-center hidden">
+            <div class="mb-6">
+                <div id="resultIcon" class="w-24 h-24 mx-auto mb-4 rounded-full flex items-center justify-center">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Quiz Selesai, Selamat!</h2>
+                <p id="resultMessage" class="text-gray-600 mb-4"></p>
+                <div class="bg-indigo-50 rounded-lg p-6 mb-6">
+                    <p class="text-5xl font-bold text-indigo-600" id="finalScore">0/5</p>
+                    <p class="text-gray-600 mt-2">True!</p>
+                </div>
+            </div>
+            <button id="restartBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
+                Ulangi Quiz
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Siapakah Pelatih dibawah ini yang paling buruk melatih Tim Nasional Indonesia?",
+                options: ["Patrick Kluivert", "Shin Tae-Young", "Luis Milla", "Alfred Riedl"],
+                correct: 0
+            },
+            {
+                question: "Siapa GOAT yang sebenarnya dalam dunia sepak bola?",
+                options: ["Lionel Messi", "Cristiano Ronaldo", "Pele", "Diego Maradona"],
+                correct: 0
+            },
+            {
+                question: "Siapa dan berapa NIM kamu?",
+                options: ["Ryan Gosling - 491", "Leonardo di Caprio - 492", "Rifky Rofiq - 489", "Pedri Gonzalez - 493"],
+                correct: 2
+            },
+            {
+                question: "Siapakah klub sepak bola terbaik di dunia?",
+                options: ["Manchester United", "FC Barcelona", "Persib Bandung", "Persija Jakarta"],
+                correct: 1
+            },
+            {
+                question: "Praktikum apakah yang sedang kamu kerjakan sekarang?",
+                options: ["Pemrograman Mobile", "Pemrograman Fungsional", "Piranti Cerdas", "Pemrograman Web"],
+                correct: 3
+            }
+        ];
+
+        // State Management
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+
+        // Arrow function untuk pertanyaan
+        const renderQuestion = () => {
+            const data = quizData[currentQuestion];
+            
+            // Template buat pertanyaan number
+            $('#questionNumber').text(`Pertanyaan ${currentQuestion + 1}/${quizData.length}`);
+            $('#questionText').text(data.question);
+            
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            $('#progressBar').css('width', `${progress}%`);
+            
+            // Clear pilihan
+            $('#optionsContainer').empty();
+            
+            // Array methods: map untuk render options
+            data.options.forEach((option, index) => {
+                const optionElement = `
+                    <div class="option-btn border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-indigo-400 hover:bg-indigo-50 transition duration-200" data-index="${index}">
+                        <div class="flex items-center">
+                            <span class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-semibold text-gray-600 mr-3">
+                                ${String.fromCharCode(65 + index)}
+                            </span>
+                            <span class="text-gray-700">${option}</span>
+                        </div>
+                    </div>
+                `;
+                $('#optionsContainer').append(optionElement);
+            });
+            
+            selectedAnswer = null;
+            $('#nextBtn').prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
+        };
+
+        // Arrow function untuk menghandle pilihan jawaban
+        const handleAnswerSelection = (index) => {
+            if (selectedAnswer !== null) return;
+            
+            selectedAnswer = index;
+            const correctAnswer = quizData[currentQuestion].correct;
+            
+            // Array methods: forEach untuk update semua opsi
+            $('.option-btn').each((i, element) => {
+                $(element).removeClass('hover:border-indigo-400 hover:bg-indigo-50 cursor-pointer');
+                $(element).addClass('cursor-not-allowed');
+                
+                if (i === correctAnswer) {
+                    $(element).removeClass('border-gray-200').addClass('border-green-500 bg-green-50');
+                    $(element).find('span').first().removeClass('bg-gray-100 text-gray-600').addClass('bg-green-500 text-white');
+                }
+                
+                if (i === index && i !== correctAnswer) {
+                    $(element).removeClass('border-gray-200').addClass('border-red-500 bg-red-50');
+                    $(element).find('span').first().removeClass('bg-gray-100 text-gray-600').addClass('bg-red-500 text-white');
+                }
+            });
+            
+            if (index === correctAnswer) {
+                score++;
+                $('#scoreDisplay').text(`Skor: ${score}`);
+            }
+            
+            $('#nextBtn').prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+        };
+
+        // Arrow function untuk next question
+        const nextQuestion = () => {
+            currentQuestion++;
+            
+            if (currentQuestion < quizData.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        };
+
+        // Arrow function untuk show result
+        const showResult = () => {
+            $('#quizScreen').fadeOut(300, () => {
+                $('#resultScreen').fadeIn(300);
+            });
+            
+            $('#finalScore').text(`${score}/${quizData.length}`);
+            
+            // Template untuk pesan hasil
+            let message = '';
+            const percentage = (score / quizData.length) * 100;
+            
+            if (percentage === 100) {
+                message = "Keren! Anda lulus dengan predikat cumlaude! 🎉";
+                $('#resultIcon').addClass('bg-green-500');
+            } else if (percentage >= 80) {
+                message = "Mantap! Dikit lagi sempurna!";
+                $('#resultIcon').addClass('bg-green-500');
+            } else if (percentage >= 60) {
+                message = "GG! Ayo belajar jangan malas! 💪";
+                $('#resultIcon').addClass('bg-blue-500');
+            } else {
+                message = "Haduh! Bye, Selamat mengulang mata kuliah! 😢";
+                $('#resultIcon').addClass('bg-orange-500');
+            }
+            
+            $('#resultMessage').text(message);
+        };
+
+        // Arrow function untuk restart quiz
+        const restartQuiz = () => {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            
+            $('#scoreDisplay').text('Skor: 0');
+            $('#resultIcon').removeClass('bg-green-500 bg-blue-500 bg-orange-500');
+            
+            $('#resultScreen').fadeOut(300, () => {
+                $('#quizScreen').fadeIn(300);
+                renderQuestion();
+            });
+        };
+
+        // Event Listeners menggunakan jQuery
+        $(document).ready(() => {
+            // Start button
+            $('#startBtn').on('click', () => {
+                $('#welcomeScreen').fadeOut(300, () => {
+                    $('#quizScreen').fadeIn(300);
+                    renderQuestion();
+                });
+            });
+            
+            // Option buttons
+            $('#optionsContainer').on('click', '.option-btn', function() {
+                const index = parseInt($(this).data('index'));
+                handleAnswerSelection(index);
+            });
+            
+            
+            $('#nextBtn').on('click', nextQuestion);
+            
+        
+            $('#restartBtn').on('click', restartQuiz);
+        });
+    </script>
+</body>
+</html>

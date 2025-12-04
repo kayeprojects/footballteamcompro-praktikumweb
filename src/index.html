@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FC Barcelona - Official Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      .custom-bg {
+        background-image: url('../assets/images/championsss-bg.jpeg');
+        background-size: cover;
+        background-position: center;
+      }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Header -->
+    <header class="fixed top-0 w-full bg-white shadow-lg z-50">
+      <nav class="container mx-auto px-4 py-4" role="navigation">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-2">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center">
+              <img src="../assets/images/clublogo.png" alt="FC Barcelona Logo" class="w-full h-full object-cover">
+            </div>
+            <span class="text-2xl font-bold text-gradient">FC Barcelona</span>
+          </div>
+          <!-- Desktop Navigation --> 
+          <ul class="hidden md:flex space-x-8" role="menu">
+            <li><a href="#home" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">Home</a></li>
+            <li><a href="#about" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">About</a></li>
+            <li><a href="#team" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">Team</a></li>
+            <li><a href="#matches" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">Matches</a></li>
+            <li><a href="#news" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">News</a></li>
+            <li><a href="#shop" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">Shop</a></li>
+            <li><a href="#contact" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">Contact</a></li>
+          </ul>
+          
+          <!-- Mobile Menu Button -->
+          <button class="md:hidden" onclick="toggleMenu()" aria-label="Toggle menu">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+          </button>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <ul id="mobileMenu" class="hidden md:hidden mt-4 space-y-2">
+            <li><a href="#home" class="block py-2 text-gray-700 hover:text-blue-900 font-semibold">Home</a></li>
+            <li><a href="#about" class="block py-2 text-gray-700 hover:text-blue-900 font-semibold">About</a></li>
+            <li><a href="#team" class="block py-2 text-gray-700 hover:text-blue-900 font-semibold">Team</a></li>
+            <li><a href="#matches" class="block py-2 text-gray-700 hover:text-blue-900 font-semibold">Matches</a></li>
+            <li><a href="#news" class="block py-2 text-gray-700 hover:text-blue-900 font-semibold">News</a></li>
+            <li><a href="#shop" class="block py-2 text-gray-700 hover:text-blue-900 font-semibold">Shop</a></li>
+            <li><a href="#contact" class="block py-2 text-gray-700 hover:text-blue-900 font-semibold">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero Section -->
+      <section id="home" class="custom-bg min-h-screen flex items-center pt-20" role="banner">
+          <div class="container mx-auto px-4">
+              <div class="grid md:grid-cols-2 gap-8 items-center">
+                  <div class="text-white animate-fadeIn">
+                      <h1 class="text-5xl md:text-7xl font-bold mb-4">MORE THAN A CLUB</h1>
+                      <p class="text-xl md:text-2xl mb-8 opacity-90">Experience the passion, tradition, and excellence of football</p>
+                      <div class="space-x-4">
+                          <button class="bg-white text-blue-900 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition hover-scale" onclick="window.location.href='https://www.tiket.com/'">
+                              Buy Tickets
+                          </button>
+                          <button class="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-900 transition">
+                              Watch Live
+                          </button>
+                      </div>
+                  </div>
+                  <div class="flex justify-center">
+                      <!-- Updated hero section logo -->
+                      <div class="w-80 h-80 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
+                        <img src="../assets/images/clublogo.png" alt="FC Barcelona Logo" class="w-40 h-40 object-cover">
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <!-- About Section -->
+      <section id="about" class="py-20 bg-gray-50" role="region" aria-labelledby="about-title">
+        <div class="container mx-auto px-4">
+            <h2 id="about-title" class="text-4xl md:text-5xl font-bold text-center mb-4 text-gradient">About FC Barcelona</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">Founded in 1899, we represent more than just football - we are a symbol of unity, passion, and excellence.</p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-lg hover-scale">
+                    <div class="text-4xl mb-4" role="img" aria-label="trophy">🏆</div>
+                    <h3 class="text-2xl font-bold mb-3 text-blue-900">Legacy</h3>
+                    <p class="text-gray-600">Over 120 years of football history with countless trophies and memorable moments that define our club.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg hover-scale">
+                    <div class="text-4xl mb-4" role="img" aria-label="star">⭐</div>
+                    <h3 class="text-2xl font-bold mb-3 text-blue-900">Excellence</h3>
+                    <p class="text-gray-600">Home to world-class players and committed to developing young talents through our academy.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg hover-scale">
+                    <div class="text-4xl mb-4" role="img" aria-label="globe">🌍</div>
+                    <h3 class="text-2xl font-bold mb-3 text-blue-900">Global Reach</h3>
+                    <p class="text-gray-600">Millions of fans worldwide united by their love for beautiful football and club values.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20" role="region" aria-labelledby="team-title">
+        <div class="container mx-auto px-4">
+            <h2 id="team-title" class="text-4xl md:text-5xl font-bold text-center mb-4 text-gradient">Our Squad</h2>
+            <p class="text-center text-gray-600 mb-12">Meet the stars who wear our colors with pride</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Lamine Yamal -->
+                <div class="text-center group">
+                    <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-4 group-hover:scale-110 transition duration-300">
+                        <div class="w-full h-full rounded-full overflow-hidden border-4 border-blue-900 shadow-lg bg-gray-200 player-photo-wrapper">
+                            <img src="/assets/images/yamal.png" 
+                                 alt="Lamine Yamal - Winger" 
+                                 class="w-full h-full object-cover"
+                                 loading="lazy"
+                                 onerror="this.style.display='none'; this.parentElement.nextElementSibling.style.display='flex';">
+                        </div>
+                        <!-- Fallback Number (hidden by default, shown via JS/CSS if img fails) -->
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-900 to-red-900 flex items-center justify-center -z-10 fallback-number" style="display: none;">
+                            <span class="text-white text-3xl font-bold">#10</span>
+                        </div>
+                        <!-- Number Badge -->
+                        <div class="absolute bottom-0 right-0 bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-white shadow-md player-number">
+                            10
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-lg">Lamine Yamal</h3>
+                    <p class="text-gray-600">Winger</p>
+                </div>
+
+                <!-- Pau Cubarsi -->
+                <div class="text-center group">
+                    <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-4 group-hover:scale-110 transition duration-300">
+                        <div class="w-full h-full rounded-full overflow-hidden border-4 border-blue-900 shadow-lg bg-gray-200 player-photo-wrapper">
+                            <img src="/assets/images/cubarsi.png" 
+                                 alt="Pau Cubarsi - Centre Back" 
+                                 class="w-full h-full object-cover"
+                                 loading="lazy"
+                                 onerror="this.style.display='none'; this.parentElement.nextElementSibling.style.display='flex';">
+                        </div>
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-900 to-red-900 flex items-center justify-center -z-10 fallback-number" style="display: none;">
+                            <span class="text-white text-3xl font-bold">#2</span>
+                        </div>
+                        <div class="absolute bottom-0 right-0 bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-white shadow-md player-number">
+                            2
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-lg">Pau Cubarsi</h3>
+                    <p class="text-gray-600">Centre Back</p>
+                </div>
+
+                <!-- Pedri -->
+                <div class="text-center group">
+                    <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-4 group-hover:scale-110 transition duration-300">
+                        <div class="w-full h-full rounded-full overflow-hidden border-4 border-blue-900 shadow-lg bg-gray-200 player-photo-wrapper">
+                            <img src="/assets/images/pedri.png" 
+                                 alt="Pedri - Midfielder" 
+                                 class="w-full h-full object-cover"
+                                 loading="lazy"
+                                 onerror="this.style.display='none'; this.parentElement.nextElementSibling.style.display='flex';">
+                        </div>
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-900 to-red-900 flex items-center justify-center -z-10 fallback-number" style="display: none;">
+                            <span class="text-white text-3xl font-bold">#  8</span>
+                        </div>
+                        <div class="absolute bottom-0 right-0 bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-white shadow-md player-number">
+                            8
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-lg">Pedri</h3>
+                    <p class="text-gray-600">Midfielder</p>
+                </div>
+
+                <!-- Joan Garcia -->
+                <div class="text-center group">
+                    <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-4 group-hover:scale-110 transition duration-300">
+                        <div class="w-full h-full rounded-full overflow-hidden border-4 border-blue-900 shadow-lg bg-gray-200 player-photo-wrapper">
+                            <img src="/assets/images/joan garcia.png" 
+                                 alt="Joan Garcia - Winger" 
+                                 class="w-full h-full object-cover"
+                                 loading="lazy"
+                                 onerror="this.style.display='none'; this.parentElement.nextElementSibling.style.display='flex';">
+                        </div>
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-900 to-red-900 flex items-center justify-center -z-10 fallback-number" style="display: none;">
+                            <span class="text-white text-3xl font-bold">#13</span>
+                        </div>
+                        <div class="absolute bottom-0 right-0 bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-white shadow-md player-number">
+                            13
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-lg">Joan Garcia</h3>
+                    <p class="text-gray-600">Goalkeeper</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="gradient-bg text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition">
+                    View Full Squad
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Matches Section -->
+    <section id="matches" class="py-20 bg-gray-50" role="region" aria-labelledby="matches-title">
+        <div class="container mx-auto px-4">
+            <h2 id="matches-title" class="text-4xl md:text-5xl font-bold text-center mb-4 text-gradient">Upcoming Matches</h2>
+            <p class="text-center text-gray-600 mb-12">Don't miss our next games</p>
+            
+            <div class="max-w-4xl mx-auto space-y-4">
+                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row justify-between items-center hover-scale">
+                    <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                        <div class="text-center">
+                            <div class="font-bold text-lg">FC Barcelona</div>
+                            <div class="text-gray-500">Home</div>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-400">VS</div>
+                        <div class="text-center">
+                            <div class="font-bold text-lg">City Rivals</div>
+                            <div class="text-gray-500">Away</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-blue-900 font-bold">Saturday, 15 Nov</div>
+                        <div class="text-gray-600">20:00</div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row justify-between items-center hover-scale">
+                    <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                        <div class="text-center">
+                            <div class="font-bold text-lg">United FC</div>
+                            <div class="text-gray-500">Away</div>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-400">VS</div>
+                        <div class="text-center">
+                            <div class="font-bold text-lg">FC Barcelona</div>
+                            <div class="text-gray-500">Home</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-blue-900 font-bold">Wednesday, 19 Nov</div>
+                        <div class="text-gray-600">21:00</div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row justify-between items-center hover-scale">
+                    <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                        <div class="text-center">
+                            <div class="font-bold text-lg">FC Barcelona</div>
+                            <div class="text-gray-500">Home</div>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-400">VS</div>
+                        <div class="text-center">
+                            <div class="font-bold text-lg">Champions FC</div>
+                            <div class="text-gray-500">Away</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-blue-900 font-bold">Sunday, 23 Nov</div>
+                        <div class="text-gray-600">18:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news" class="py-20" role="region" aria-labelledby="news-title">
+        <div class="container mx-auto px-4">
+            <h2 id="news-title" class="text-4xl md:text-5xl font-bold text-center mb-4 text-gradient">Latest News</h2>
+            <p class="text-center text-gray-600 mb-12">Stay updated with club news and announcements</p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <article class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
+                    <div class="h-48 gradient-bg flex items-center justify-center">
+                        <span class="text-white text-4xl" role="img" aria-label="newspaper">📰</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-sm text-blue-900 mb-2">2 hours ago</div>
+                        <h3 class="text-xl font-bold mb-3">Record Breaking Victory</h3>
+                        <p class="text-gray-600 mb-4">The team secured a historic 5-0 win in yesterday's match, marking our best performance this season.</p>
+                        <a href="#" class="text-blue-900 font-semibold hover:underline">Read More →</a>
+                    </div>
+                </article>
+                
+                <article class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
+                    <div class="h-48 gradient-bg flex items-center justify-center">
+                        <span class="text-white text-4xl" role="img" aria-label="star">🌟</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-sm text-blue-900 mb-2">1 day ago</div>
+                        <h3 class="text-xl font-bold mb-3">New Signing Announced</h3>
+                        <p class="text-gray-600 mb-4">We're excited to welcome our latest addition to the squad. The young talent joins us on a 5-year contract.</p>
+                        <a href="#" class="text-blue-900 font-semibold hover:underline">Read More →</a>
+                    </div>
+                </article>
+                
+                <article class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
+                    <div class="h-48 gradient-bg flex items-center justify-center">
+                        <span class="text-white text-4xl" role="img" aria-label="stadium">🏟️</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-sm text-blue-900 mb-2">3 days ago</div>
+                        <h3 class="text-xl font-bold mb-3">Stadium Renovation Plans</h3>
+                        <p class="text-gray-600 mb-4">Major upgrades coming to our home stadium, increasing capacity to 100,000 seats by 2025.</p>
+                        <a href="#" class="text-blue-900 font-semibold hover:underline">Read More →</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop Section -->
+    <section id="shop" class="py-20 bg-gray-50" role="region" aria-labelledby="shop-title">
+        <div class="container mx-auto px-4">
+            <h2 id="shop-title" class="text-4xl md:text-5xl font-bold text-center mb-4 text-gradient">Official Store</h2>
+            <p class="text-center text-gray-600 mb-12">Get your official FC Barcelona merchandise</p>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
+                    <div class="h-48 gradient-bg flex items-center justify-center">
+                        <span class="text-white text-6xl" role="img" aria-label="jersey">👕</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Home Kit 2024/25</h3>
+                        <p class="text-2xl font-bold text-blue-900">Rp1,350,000</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
+                    <div class="h-48 bg-gray-800 flex items-center justify-center">
+                        <span class="text-white text-6xl" role="img" aria-label="jersey">👕</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Away Kit 2024/25</h3>
+                        <p class="text-2xl font-bold text-blue-900">Rp1,350,000</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
+                    <div class="h-48 bg-yellow-400 flex items-center justify-center">
+                        <span class="text-white text-6xl" role="img" aria-label="gloves">🧤</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Training Kit</h3>
+                        <p class="text-2xl font-bold text-blue-900">Rp1,050,000</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
+                    <div class="h-48 bg-red-600 flex items-center justify-center">
+                        <span class="text-white text-6xl" role="img" aria-label="cap">🧢</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Accessories</h3>
+                        <p class="text-2xl font-bold text-blue-900">Mulai dari Rp300,000</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="gradient-bg text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition">
+                    Visit Official Store
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20" role="region" aria-labelledby="contact-title">
+        <div class="container mx-auto px-4">
+            <h2 id="contact-title" class="text-4xl md:text-5xl font-bold text-center mb-4 text-gradient">Get In Touch</h2>
+            <p class="text-center text-gray-600 mb-12">Connect with us and be part of the family</p>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6 text-blue-900">Contact Information</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-2xl" role="img" aria-label="location">📍</span>
+                                <div>
+                                    <h4 class="font-bold">Stadium Address</h4>
+                                    <p class="text-gray-600">Jl. Raya Tlogomas No.246, Babatan, Tegalgondo, Kec. Lowokwaru, Kota Malang, Jawa Timur 65144</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-2xl" role="img" aria-label="phone">📞</span>
+                                <div>
+                                    <h4 class="font-bold">Phone</h4>
+                                    <p class="text-gray-600">+62 812 3456 789</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-2xl" role="img" aria-label="email">✉️</span>
+                                <div>
+                                    <h4 class="font-bold">Email</h4>
+                                    <p class="text-gray-600">decul@fcbarcelona.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-bold mb-4">Follow Us</h4>
+                            <div class="flex space-x-4">
+                                <a href="https://twitter.com/FCBarcelona" target="_blank" rel="noopener noreferrer" class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center text-white cursor-pointer hover:opacity-80 transition hover-scale" aria-label="Follow us on Twitter">
+                                  <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="https://www.instagram.com/fcbarcelona" target="_blank" rel="noopener noreferrer" class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center text-white cursor-pointer hover:opacity-80 transition hover-scale" aria-label="Follow us on Instagram">
+                                  <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="https://www.youtube.com/fcbarcelona" target="_blank" rel="noopener noreferrer" class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center text-white cursor-pointer hover:opacity-80 transition hover-scale" aria-label="Subscribe to our YouTube channel">
+                                  <i class="fab fa-youtube"></i>
+                                </a>
+                                <a href="https://www.tiktok.com/@fcbarcelona" target="_blank" rel="noopener noreferrer" class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center text-white cursor-pointer hover:opacity-80 transition hover-scale" aria-label="Follow us on TikTok">
+                                  <i class="fab fa-tiktok"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6 text-blue-900">Send Us a Message</h3>
+                        <form class="space-y-4">
+                            <input type="text" placeholder="Your Name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" required>
+                            <input type="email" placeholder="Your Email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" required>
+                            <textarea placeholder="Your Message" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" required></textarea>
+                            <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-bold hover:opacity-90 transition">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-12" role="contentinfo">
+      <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-8 mb-8">
+          <div>
+              <h4 class="font-bold text-lg mb-4">Club</h4>
+              <ul class="space-y-2 text-sm">
+                  <li><a href="#" class="hover:underline">History</a></li>
+                  <li><a href="#" class="hover:underline">Honours</a></li>
+                  <li><a href="#" class="hover:underline">Stadium Tour</a></li>
+                  <li><a href="#" class="hover:underline">Museum</a></li>
+              </ul>
+          </div>
+          <div>
+              <h4 class="font-bold text-lg mb-4">Team</h4>
+              <ul class="space-y-2 text-sm">
+                  <li><a href="#" class="hover:underline">First Team</a></li>
+                  <li><a href="#" class="hover:underline">Women's Team</a></li>
+                  <li><a href="#" class="hover:underline">Academy</a></li>
+                  <li><a href="#" class="hover:underline">Coaches</a></li>
+              </ul>
+          </div>
+          <div>
+              <h4 class="font-bold text-lg mb-4">Tickets</h4>
+              <ul class="space-y-2 text-sm">
+                  <li><a href="#" class="hover:underline">Buy Tickets</a></li>
+                  <li><a href="#" class="hover:underline">Season Pass</a></li>
+                  <li><a href="#" class="hover:underline">VIP Experience</a></li>
+                  <li><a href="#" class="hover:underline">Away Games</a></li>
+              </ul>
+          </div>
+          <div>
+              <h4 class="font-bold text-lg mb-4">Partners</h4>
+              <ul class="space-y-2 text-sm">
+                  <li><a href="#" class="hover:underline">Main Sponsors</a></li>
+                  <li><a href="#" class="hover:underline">Official Partners</a></li>
+                  <li><a href="#" class="hover:underline">Suppliers</a></li>
+                  <li><a href="#" class="hover:underline">Media Partners</a></li>
+              </ul>
+          </div>
+        </div>
+        
+        <div class="border-t border-white/30 pt-8 text-center">
+            <p>&copy; 2024 FC Barcelona. All rights reserved. | Privacy Policy | Terms of Use | Cookie Policy</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('mobileMenu').classList.add('hidden');
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.classList.add('bg-opacity-95');
+            } else {
+                header.classList.remove('bg-opacity-95');
+            }
+        });
+    </script>
+</body>
+</html>

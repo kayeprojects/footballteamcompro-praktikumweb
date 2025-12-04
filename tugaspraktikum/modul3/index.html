@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Fetch Google Books API (Tailwind + jQuery)</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-6 shadow-md mb-8">
+    <h1 class="text-3xl font-bold text-center">📚 Hasil Pencarian Buku: "Emyu"</h1>
+  </header>
+
+  <!-- Konten -->
+  <main class="max-w-6xl mx-auto px-4 mb-20">
+    <div id="buku-container" class="text-center text-gray-500">Memuat data buku...</div>
+  </main>
+
+  <script src="fetch.js"></script>
+</body>
+</html>

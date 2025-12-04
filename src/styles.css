@@ -1,0 +1,62 @@
+/* Custom Gradient Background */
+.gradient-bg {
+    background: linear-gradient(135deg, #004d98 0%, #a50044 100%);
+}
+
+/* Text Gradient Effect */
+.text-gradient {
+    background: linear-gradient(90deg, #004d98, #a50044);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Hover Scale Animation */
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* Player Card Styles */
+.player-photo-wrapper {
+    position: relative;
+    overflow: hidden;
+    background-color: #f3f4f6; /* gray-100 fallback */
+}
+
+.player-number {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    transition: transform 0.3s ease;
+}
+
+.group:hover .player-number {
+    transform: scale(1.1);
+}
+
+.fallback-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
