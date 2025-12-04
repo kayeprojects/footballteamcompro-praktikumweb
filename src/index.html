@@ -219,59 +219,11 @@
             <h2 id="matches-title" class="text-4xl md:text-5xl font-bold text-center mb-4 text-gradient">Upcoming Matches</h2>
             <p class="text-center text-gray-600 mb-12">Don't miss our next games</p>
             
-            <div class="max-w-4xl mx-auto space-y-4">
-                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row justify-between items-center hover-scale">
-                    <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                        <div class="text-center">
-                            <div class="font-bold text-lg">FC Barcelona</div>
-                            <div class="text-gray-500">Home</div>
-                        </div>
-                        <div class="text-2xl font-bold text-gray-400">VS</div>
-                        <div class="text-center">
-                            <div class="font-bold text-lg">City Rivals</div>
-                            <div class="text-gray-500">Away</div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-blue-900 font-bold">Saturday, 15 Nov</div>
-                        <div class="text-gray-600">20:00</div>
-                    </div>
-                </div>
-                
-                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row justify-between items-center hover-scale">
-                    <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                        <div class="text-center">
-                            <div class="font-bold text-lg">United FC</div>
-                            <div class="text-gray-500">Away</div>
-                        </div>
-                        <div class="text-2xl font-bold text-gray-400">VS</div>
-                        <div class="text-center">
-                            <div class="font-bold text-lg">FC Barcelona</div>
-                            <div class="text-gray-500">Home</div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-blue-900 font-bold">Wednesday, 19 Nov</div>
-                        <div class="text-gray-600">21:00</div>
-                    </div>
-                </div>
-                
-                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row justify-between items-center hover-scale">
-                    <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                        <div class="text-center">
-                            <div class="font-bold text-lg">FC Barcelona</div>
-                            <div class="text-gray-500">Home</div>
-                        </div>
-                        <div class="text-2xl font-bold text-gray-400">VS</div>
-                        <div class="text-center">
-                            <div class="font-bold text-lg">Champions FC</div>
-                            <div class="text-gray-500">Away</div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-blue-900 font-bold">Sunday, 23 Nov</div>
-                        <div class="text-gray-600">18:00</div>
-                    </div>
+            <div id="matches-list" class="max-w-4xl mx-auto space-y-4">
+                <!-- Loading State -->
+                <div class="text-center py-8">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-900"></div>
+                    <p class="mt-2 text-gray-600">Loading upcoming matches...</p>
                 </div>
             </div>
         </div>
@@ -528,5 +480,6 @@
             }
         });
     </script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
