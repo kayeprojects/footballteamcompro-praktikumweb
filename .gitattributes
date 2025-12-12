@@ -1,0 +1,12 @@
+# Force GitHub to detect languages correctly
+*.php linguist-language=PHP
+*.js linguist-detectable
+*.html linguist-detectable
+*.css linguist-detectable
+
+# Mark vendor files as vendored (if any slip through)
+backend/vendor/** linguist-vendored
+node_modules/** linguist-vendored
+
+# Mark documentation
+*.md linguist-documentation
