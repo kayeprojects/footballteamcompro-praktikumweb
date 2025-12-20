@@ -32,10 +32,42 @@
             <li><a href="#about" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">About</a></li>
             <li><a href="#team" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">Team</a></li>
             <li><a href="#matches" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">Matches</a></li>
-            <li><a href="#news" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">News</a></li>
+            <li><a href="#dashboard-section" class="text-gray-700 hover:text-blue-900 font-semibold transition hidden" id="nav-dashboard" role="menuitem">My Tickets</a></li>
             <li><a href="#shop" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">Shop</a></li>
             <li><a href="#contact" class="text-gray-700 hover:text-blue-900 font-semibold transition" role="menuitem">Contact</a></li>
           </ul>
+          
+          <!-- Auth Buttons -->
+          <div class="hidden md:flex items-center space-x-4">
+            <!-- Login/Register Buttons (shown when logged out) -->
+            <div id="auth-buttons" class="flex items-center space-x-3">
+              <button onclick="openModal('loginModal')" class="text-blue-900 hover:text-blue-700 font-semibold transition">
+                Login
+              </button>
+              <button onclick="openModal('registerModal')" class="gradient-bg text-white px-4 py-2 rounded-full font-semibold hover:opacity-90 transition">
+                Register
+              </button>
+            </div>
+            
+            <!-- User Menu (shown when logged in) -->
+            <div id="user-menu" class="hidden relative">
+              <button onclick="document.getElementById('user-dropdown').classList.toggle('hidden')" class="flex items-center space-x-2 text-gray-700 hover:text-blue-900">
+                <div class="w-8 h-8 bg-blue-900 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                  <i class="fas fa-user"></i>
+                </div>
+                <span id="user-name" class="font-semibold">User</span>
+                <i class="fas fa-chevron-down text-xs"></i>
+              </button>
+              <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Tickets</a>
+                <a href="dashboard.html#purchase" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Buy Tickets</a>
+                <hr class="my-2">
+                <button onclick="logout()" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
           
           <!-- Mobile Menu Button -->
           <button class="md:hidden" onclick="toggleMenu()" aria-label="Toggle menu">
@@ -60,16 +92,23 @@
 
     <main>
       <!-- Hero Section -->
-      <section id="home" class="custom-bg min-h-screen flex items-center pt-20" role="banner">
-          <div class="container mx-auto px-4">
+      <section id="home" class="custom-bg min-h-screen flex items-center pt-20 relative overflow-hidden" role="banner">
+          <!-- Floating Background Shapes -->
+          <div class="floating-shapes">
+              <div class="floating-shape"></div>
+              <div class="floating-shape"></div>
+              <div class="floating-shape"></div>
+          </div>
+          
+          <div class="container mx-auto px-4 relative z-10">
               <div class="grid md:grid-cols-2 gap-8 items-center">
                   <div class="text-white animate-fadeIn">
                       <h1 class="text-5xl md:text-7xl font-bold mb-4">MORE THAN A CLUB</h1>
                       <p class="text-xl md:text-2xl mb-8 opacity-90">Experience the passion, tradition, and excellence of football</p>
                       <div class="space-x-4">
-                          <button class="bg-white text-blue-900 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition hover-scale" onclick="window.location.href='https://www.tiket.com/'">
+                          <a href="dashboard.html#purchase" class="inline-block bg-white text-blue-900 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition hover-scale">
                               Buy Tickets
-                          </button>
+                          </a>
                           <button class="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-900 transition">
                               Watch Live
                           </button>
@@ -206,9 +245,9 @@
             </div>
             
             <div class="text-center mt-12">
-                <button class="gradient-bg text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition">
-                    View Full Squad
-                </button>
+                <a href="players.html" class="inline-block gradient-bg text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition hover-scale">
+                    View Full Squad <i class="fas fa-arrow-right ml-2"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -282,51 +321,76 @@
             <p class="text-center text-gray-600 mb-12">Get your official FC Barcelona merchandise</p>
             
             <div class="grid md:grid-cols-4 gap-6">
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
-                    <div class="h-48 gradient-bg flex items-center justify-center">
-                        <span class="text-white text-6xl" role="img" aria-label="jersey">👕</span>
+                <!-- Home Kit -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-scale group">
+                    <div class="h-56 overflow-hidden bg-gray-50">
+                        <img src="/assets/images/shop/home_kit.png" 
+                             alt="FC Barcelona Home Kit 2024/25" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             loading="lazy">
                     </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Home Kit 2024/25</h3>
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-blue-900 bg-blue-100 px-2 py-1 rounded-full">NEW</span>
+                        <h3 class="font-bold text-lg mt-2 mb-1">Home Kit 2024/25</h3>
+                        <p class="text-sm text-gray-500 mb-2">Official match jersey</p>
                         <p class="text-2xl font-bold text-blue-900">Rp1,350,000</p>
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
-                    <div class="h-48 bg-gray-800 flex items-center justify-center">
-                        <span class="text-white text-6xl" role="img" aria-label="jersey">👕</span>
+                <!-- Away Kit -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-scale group">
+                    <div class="h-56 overflow-hidden bg-gray-50">
+                        <img src="/assets/images/shop/away_kit.png" 
+                             alt="FC Barcelona Away Kit 2024/25" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             loading="lazy">
                     </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Away Kit 2024/25</h3>
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-gray-700 bg-gray-200 px-2 py-1 rounded-full">AWAY</span>
+                        <h3 class="font-bold text-lg mt-2 mb-1">Away Kit 2024/25</h3>
+                        <p class="text-sm text-gray-500 mb-2">Official match jersey</p>
                         <p class="text-2xl font-bold text-blue-900">Rp1,350,000</p>
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
-                    <div class="h-48 bg-yellow-400 flex items-center justify-center">
-                        <span class="text-white text-6xl" role="img" aria-label="gloves">🧤</span>
+                <!-- Training Kit -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-scale group">
+                    <div class="h-56 overflow-hidden bg-gray-50">
+                        <img src="/assets/images/shop/training_kit.png" 
+                             alt="FC Barcelona Training Kit" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             loading="lazy">
                     </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Training Kit</h3>
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-yellow-700 bg-yellow-100 px-2 py-1 rounded-full">TRAINING</span>
+                        <h3 class="font-bold text-lg mt-2 mb-1">Training Kit</h3>
+                        <p class="text-sm text-gray-500 mb-2">Professional training wear</p>
                         <p class="text-2xl font-bold text-blue-900">Rp1,050,000</p>
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-scale">
-                    <div class="h-48 bg-red-600 flex items-center justify-center">
-                        <span class="text-white text-6xl" role="img" aria-label="cap">🧢</span>
+                <!-- Accessories -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-scale group">
+                    <div class="h-56 overflow-hidden bg-gray-50">
+                        <img src="/assets/images/shop/accessories.png" 
+                             alt="FC Barcelona Accessories" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             loading="lazy">
                     </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Accessories</h3>
-                        <p class="text-2xl font-bold text-blue-900">Mulai dari Rp300,000</p>
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-red-700 bg-red-100 px-2 py-1 rounded-full">MERCH</span>
+                        <h3 class="font-bold text-lg mt-2 mb-1">Accessories</h3>
+                        <p class="text-sm text-gray-500 mb-2">Caps, scarves, bags & more</p>
+                        <p class="text-2xl font-bold text-blue-900">From Rp300,000</p>
                     </div>
                 </div>
             </div>
             
             <div class="text-center mt-12">
-                <button class="gradient-bg text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition">
-                    Visit Official Store
-                </button>
+                <a href="https://store.fcbarcelona.com" target="_blank" rel="noopener noreferrer" 
+                   class="inline-block gradient-bg text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition hover-scale">
+                    Visit Official Store <i class="fas fa-external-link-alt ml-2"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -448,38 +512,94 @@
       </div>
     </footer>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        }
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+            <div class="gradient-bg p-6 text-white">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold">Welcome Back</h3>
+                    <button onclick="closeModal('loginModal')" class="text-white hover:text-gray-200">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <p class="mt-2 text-white/80">Sign in to your account</p>
+            </div>
+            <form onsubmit="handleLoginSubmit(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input type="email" name="email" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900 focus:ring-2 focus:ring-blue-200"
+                           placeholder="your@email.com">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                    <input type="password" name="password" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900 focus:ring-2 focus:ring-blue-200"
+                           placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-bold hover:opacity-90 transition">
+                    Sign In
+                </button>
+                <p class="text-center text-gray-600">
+                    Don't have an account? 
+                    <button type="button" onclick="closeModal('loginModal'); openModal('registerModal')" class="text-blue-900 font-semibold hover:underline">
+                        Register
+                    </button>
+                </p>
+            </form>
+        </div>
+    </div>
 
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Close mobile menu if open
-                    document.getElementById('mobileMenu').classList.add('hidden');
-                }
-            });
-        });
+    <!-- Register Modal -->
+    <div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+            <div class="gradient-bg p-6 text-white">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold">Create Account</h3>
+                    <button onclick="closeModal('registerModal')" class="text-white hover:text-gray-200">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <p class="mt-2 text-white/80">Join the FC Barcelona family</p>
+            </div>
+            <form onsubmit="handleRegisterSubmit(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Full Name</label>
+                    <input type="text" name="name" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900 focus:ring-2 focus:ring-blue-200"
+                           placeholder="Your full name">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input type="email" name="email" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900 focus:ring-2 focus:ring-blue-200"
+                           placeholder="your@email.com">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                    <input type="password" name="password" required minlength="8"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900 focus:ring-2 focus:ring-blue-200"
+                           placeholder="Min. 8 characters">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Confirm Password</label>
+                    <input type="password" name="password_confirmation" required minlength="8"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900 focus:ring-2 focus:ring-blue-200"
+                           placeholder="Confirm your password">
+                </div>
+                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-bold hover:opacity-90 transition">
+                    Create Account
+                </button>
+                <p class="text-center text-gray-600">
+                    Already have an account? 
+                    <button type="button" onclick="closeModal('registerModal'); openModal('loginModal')" class="text-blue-900 font-semibold hover:underline">
+                        Sign In
+                    </button>
+                </p>
+            </form>
+        </div>
+    </div>
 
-        // Add scroll effect to header
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.classList.add('bg-opacity-95');
-            } else {
-                header.classList.remove('bg-opacity-95');
-            }
-        });
-    </script>
     <script type="module" src="script.js"></script>
 </body>
 </html>

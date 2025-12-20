@@ -1,62 +1,341 @@
+/* ============================================
+   FC Barcelona - Enhanced Styles
+   ============================================ */
+
 /* Custom Gradient Background */
 .gradient-bg {
-    background: linear-gradient(135deg, #004d98 0%, #a50044 100%);
+  background: linear-gradient(135deg, #004d98 0%, #a50044 100%);
 }
 
 /* Text Gradient Effect */
 .text-gradient {
-    background: linear-gradient(90deg, #004d98, #a50044);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  background: linear-gradient(90deg, #004d98, #a50044);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Hover Scale Animation */
 .hover-scale {
-    transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .hover-scale:hover {
-    transform: scale(1.05);
+  transform: scale(1.03);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* Fade In Animation */
+/* ============================================
+   Scroll Reveal Animations
+   ============================================ */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.scroll-reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.scroll-reveal-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.scroll-reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stagger delays for children */
+.stagger-children > *:nth-child(1) {
+  transition-delay: 0.1s;
+}
+.stagger-children > *:nth-child(2) {
+  transition-delay: 0.2s;
+}
+.stagger-children > *:nth-child(3) {
+  transition-delay: 0.3s;
+}
+.stagger-children > *:nth-child(4) {
+  transition-delay: 0.4s;
+}
+.stagger-children > *:nth-child(5) {
+  transition-delay: 0.5s;
+}
+.stagger-children > *:nth-child(6) {
+  transition-delay: 0.6s;
+}
+
+/* ============================================
+   Parallax Backgrounds
+   ============================================ */
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* ============================================
+   Floating Background Elements
+   ============================================ */
+.floating-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  animation: float 20s infinite ease-in-out;
+}
+
+.floating-shape:nth-child(1) {
+  width: 300px;
+  height: 300px;
+  background: #004d98;
+  top: 10%;
+  left: -5%;
+  animation-delay: 0s;
+}
+
+.floating-shape:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  background: #a50044;
+  top: 60%;
+  right: -3%;
+  animation-delay: -7s;
+}
+
+.floating-shape:nth-child(3) {
+  width: 150px;
+  height: 150px;
+  background: #004d98;
+  bottom: 10%;
+  left: 20%;
+  animation-delay: -14s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(20px, -20px) rotate(5deg);
+  }
+  50% {
+    transform: translate(-10px, 20px) rotate(-5deg);
+  }
+  75% {
+    transform: translate(15px, 10px) rotate(3deg);
+  }
+}
+
+/* ============================================
+   Glassmorphism Cards
+   ============================================ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   Fade In Animation
+   ============================================ */
 @keyframes fadeIn {
-    from { 
-        opacity: 0; 
-        transform: translateY(20px); 
-    }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fadeIn {
-    animation: fadeIn 0.8s ease-out;
+  animation: fadeIn 0.8s ease-out;
 }
 
-/* Player Card Styles */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* ============================================
+   Pulse Animation
+   ============================================ */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(0, 77, 152, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(165, 0, 68, 0.6);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s infinite ease-in-out;
+}
+
+/* ============================================
+   Player Card Styles
+   ============================================ */
 .player-photo-wrapper {
-    position: relative;
-    overflow: hidden;
-    background-color: #f3f4f6; /* gray-100 fallback */
+  position: relative;
+  overflow: hidden;
+  background-color: #f3f4f6;
 }
 
 .player-number {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 10;
-    transition: transform 0.3s ease;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  transition: transform 0.3s ease;
 }
 
 .group:hover .player-number {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .fallback-number {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   News Card Styles
+   ============================================ */
+.news-card {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.news-card .news-image {
+  transition: transform 0.5s ease;
+}
+
+.news-card:hover .news-image {
+  transform: scale(1.05);
+}
+
+/* ============================================
+   Section Dividers
+   ============================================ */
+.section-divider {
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #004d98,
+    #a50044,
+    transparent
+  );
+  margin: 0 auto;
+  width: 200px;
+}
+
+/* ============================================
+   Smooth Scroll
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ============================================
+   Loading Skeleton
+   ============================================ */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ============================================
+   Custom Scrollbar
+   ============================================ */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #004d98, #a50044);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #003d7a, #8a0038);
 }

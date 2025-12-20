@@ -11,6 +11,10 @@ export default defineConfig({
   server: {
     open: true,
     proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
       '/football-api': {
         target: 'https://api.football-data.org',
         changeOrigin: true,
