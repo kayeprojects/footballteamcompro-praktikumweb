@@ -242,12 +242,12 @@ function renderTickets(tickets) {
                             <p class="text-2xl font-bold text-blue-900 mb-2">Rp ${formatPrice(ticket.price)}</p>
                             <div class="flex gap-2 justify-start md:justify-end">
                                 ${ticket.status === 'pending' ? `
-                                    <button onclick="confirmTicket(${ticket.id})" class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition">
+                                    <button onclick="confirmTicket('${ticket.uuid}')" class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition">
                                         <i class="fas fa-check mr-1"></i> Confirm
                                     </button>
                                 ` : ''}
                                 ${['pending', 'active'].includes(ticket.status) ? `
-                                    <button onclick="cancelTicket(${ticket.id})" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition">
+                                    <button onclick="cancelTicket('${ticket.uuid}')" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition">
                                         <i class="fas fa-times mr-1"></i> Cancel
                                     </button>
                                 ` : ''}
@@ -269,26 +269,27 @@ function filterTickets(status) {
     }
 }
 
-async function cancelTicket(ticketId) {
+async function cancelTicket(ticketUuid) {
     if (!confirm('Are you sure you want to cancel this ticket?')) return;
 
     try {
-        const response = await apiRequest(`/tickets/${ticketId}`, {
+        const response = await apiRequest(`/tickets/${ticketUuid}`, {
             method: 'DELETE'
         });
 
         if (response.status === 'success') {
             showToast('Ticket cancelled successfully', 'success');
             loadUserTickets();
+            loadUpcomingMatches(); // Refresh seats
         }
     } catch (error) {
         showToast(error.message || 'Failed to cancel ticket', 'error');
     }
 }
 
-async function confirmTicket(ticketId) {
+async function confirmTicket(ticketUuid) {
     try {
-        const response = await apiRequest(`/tickets/${ticketId}/confirm`, {
+        const response = await apiRequest(`/tickets/${ticketUuid}/confirm`, {
             method: 'POST'
         });
 
@@ -301,22 +302,20 @@ async function confirmTicket(ticketId) {
     }
 }
 
-async function purchaseTicket(matchTitle, matchDate, category, price) {
+async function purchaseTicket(matchUuid, category) {
     try {
         const response = await apiRequest('/tickets', {
             method: 'POST',
             body: JSON.stringify({
-                match_title: matchTitle,
-                match_date: matchDate,
-                category: category,
-                price: price,
-                seat_number: generateSeatNumber()
+                match_uuid: matchUuid,
+                category: category
             })
         });
 
         if (response.status === 'success') {
             showToast('Ticket purchased successfully!', 'success');
             loadUserTickets();
+            loadUpcomingMatches(); // Refresh available seats
             return response.data;
         }
     } catch (error) {
@@ -324,41 +323,35 @@ async function purchaseTicket(matchTitle, matchDate, category, price) {
     }
 }
 
-function generateSeatNumber() {
-    const sections = ['A', 'B', 'C', 'D'];
-    const section = sections[Math.floor(Math.random() * sections.length)];
-    const row = Math.floor(Math.random() * 50) + 1;
-    const seat = Math.floor(Math.random() * 30) + 1;
-    return `${section}${row}-${seat}`;
-}
-
 // ============================================
-// Matches
+// Matches (from Database)
 // ============================================
 async function loadUpcomingMatches() {
     const loadingEl = document.getElementById('matches-loading');
     const gridEl = document.getElementById('matches-grid');
 
     try {
-        // Try backend proxy first
-        const response = await apiRequest(`/football/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=6`);
-        if (response.status === 'success' && response.data.matches) {
-            renderMatches(response.data.matches);
+        // Fetch matches from our database API
+        const response = await fetch(`${API_BASE_URL}/matches?upcoming=true&available=true&limit=6`);
+        const data = await response.json();
+        
+        if (data.status === 'success' && data.data.data) {
+            renderMatches(data.data.data);
         } else {
             throw new Error('No matches');
         }
     } catch (error) {
-        console.log('Backend proxy failed, trying direct API...');
+        console.log('Database matches failed, trying football-data.org API...');
         try {
-            const directResponse = await fetch(`/football-api/v4/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=6`);
-            const data = await directResponse.json();
-            if (data.matches) {
-                renderMatches(data.matches);
+            // Fallback to football-data.org API
+            const response = await apiRequest(`/football/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=6`);
+            if (response.status === 'success' && response.data.matches) {
+                renderExternalMatches(response.data.matches);
             } else {
-                renderFallbackMatches();
+                renderNoMatches();
             }
         } catch (e) {
-            renderFallbackMatches();
+            renderNoMatches();
         }
     }
 }
@@ -371,39 +364,45 @@ function renderMatches(matches) {
     gridEl.classList.remove('hidden');
 
     if (matches.length === 0) {
-        gridEl.innerHTML = '<p class="text-center text-gray-600 col-span-full py-8">No upcoming matches scheduled.</p>';
+        gridEl.innerHTML = '<p class="text-center text-gray-600 col-span-full py-8">No upcoming matches with available seats.</p>';
         return;
     }
 
     gridEl.innerHTML = matches.map(match => {
-        const matchDate = new Date(match.utcDate);
+        const matchDate = new Date(match.match_date);
         const dateStr = matchDate.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
         const timeStr = matchDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        const seatsLeft = match.available_seats;
+        const seatsClass = seatsLeft <= 10 ? 'text-red-600' : seatsLeft <= 30 ? 'text-yellow-600' : 'text-green-600';
 
         return `
             <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
                 <div class="gradient-bg p-4 text-white text-center">
-                    <span class="text-xs uppercase tracking-wider">${match.competition.name}</span>
+                    <span class="text-xs uppercase tracking-wider">${match.competition}</span>
                 </div>
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
                         <div class="text-center flex-1">
-                            <p class="font-bold text-lg truncate" title="${match.homeTeam.name}">${match.homeTeam.shortName || match.homeTeam.name}</p>
+                            ${match.home_team_logo ? `<img src="${match.home_team_logo}" alt="${match.home_team}" class="w-12 h-12 mx-auto mb-2 object-contain">` : ''}
+                            <p class="font-bold text-sm truncate" title="${match.home_team}">${match.home_team}</p>
                             <p class="text-xs text-gray-500">HOME</p>
                         </div>
-                        <div class="px-4 text-2xl font-bold text-gray-300">VS</div>
+                        <div class="px-4 text-xl font-bold text-gray-300">VS</div>
                         <div class="text-center flex-1">
-                            <p class="font-bold text-lg truncate" title="${match.awayTeam.name}">${match.awayTeam.shortName || match.awayTeam.name}</p>
+                            ${match.away_team_logo ? `<img src="${match.away_team_logo}" alt="${match.away_team}" class="w-12 h-12 mx-auto mb-2 object-contain">` : ''}
+                            <p class="font-bold text-sm truncate" title="${match.away_team}">${match.away_team}</p>
                             <p class="text-xs text-gray-500">AWAY</p>
                         </div>
                     </div>
                     <div class="text-center mb-4 pb-4 border-b border-gray-100">
                         <p class="text-blue-900 font-bold">${dateStr}</p>
                         <p class="text-gray-600 text-sm">${timeStr}</p>
+                        <p class="text-xs ${seatsClass} mt-1"><i class="fas fa-chair mr-1"></i>${seatsLeft} seats left</p>
                     </div>
-                    <button onclick="showBuyTicketModal('${match.homeTeam.name} vs ${match.awayTeam.name}', '${match.utcDate}')" 
-                            class="w-full gradient-bg text-white py-3 rounded-lg font-bold hover:opacity-90 transition">
-                        <i class="fas fa-ticket-alt mr-2"></i> Buy Ticket
+                    <button onclick="showBuyTicketModal('${match.uuid}', '${match.title}')" 
+                            class="w-full gradient-bg text-white py-3 rounded-lg font-bold hover:opacity-90 transition"
+                            ${seatsLeft === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-ticket-alt mr-2"></i> ${seatsLeft === 0 ? 'Sold Out' : 'Buy Ticket'}
                     </button>
                 </div>
             </div>
@@ -411,21 +410,51 @@ function renderMatches(matches) {
     }).join('');
 }
 
-function renderFallbackMatches() {
-    const fallbackMatches = [
-        { utcDate: new Date(Date.now() + 86400000 * 3).toISOString(), homeTeam: { name: 'FC Barcelona', shortName: 'Barcelona' }, awayTeam: { name: 'Real Madrid', shortName: 'Real Madrid' }, competition: { name: 'La Liga' } },
-        { utcDate: new Date(Date.now() + 86400000 * 7).toISOString(), homeTeam: { name: 'Atletico Madrid', shortName: 'Atletico' }, awayTeam: { name: 'FC Barcelona', shortName: 'Barcelona' }, competition: { name: 'La Liga' } },
-        { utcDate: new Date(Date.now() + 86400000 * 14).toISOString(), homeTeam: { name: 'FC Barcelona', shortName: 'Barcelona' }, awayTeam: { name: 'Bayern Munich', shortName: 'Bayern' }, competition: { name: 'Champions League' } },
-    ];
-    renderMatches(fallbackMatches);
+function renderExternalMatches(matches) {
+    const loadingEl = document.getElementById('matches-loading');
+    const gridEl = document.getElementById('matches-grid');
+
+    loadingEl.classList.add('hidden');
+    gridEl.classList.remove('hidden');
+
+    gridEl.innerHTML = `
+        <div class="col-span-full bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+            <p class="text-sm text-yellow-700">Showing matches from external API. To purchase tickets, matches must be added to the database.</p>
+        </div>
+    ` + matches.slice(0, 3).map(match => {
+        const matchDate = new Date(match.utcDate);
+        const dateStr = matchDate.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+        
+        return `
+            <div class="bg-white rounded-xl shadow-md overflow-hidden opacity-75">
+                <div class="bg-gray-400 p-4 text-white text-center">
+                    <span class="text-xs uppercase tracking-wider">${match.competition.name}</span>
+                </div>
+                <div class="p-6 text-center">
+                    <p class="font-bold">${match.homeTeam.shortName || match.homeTeam.name} vs ${match.awayTeam.shortName || match.awayTeam.name}</p>
+                    <p class="text-gray-600 text-sm mt-2">${dateStr}</p>
+                    <p class="text-gray-400 text-xs mt-4">Not available for purchase</p>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderNoMatches() {
+    const loadingEl = document.getElementById('matches-loading');
+    const gridEl = document.getElementById('matches-grid');
+
+    loadingEl.classList.add('hidden');
+    gridEl.classList.remove('hidden');
+    gridEl.innerHTML = '<p class="text-center text-gray-600 col-span-full py-8">No upcoming matches scheduled. Check back later!</p>';
 }
 
 // ============================================
 // Modal & UI Helpers
 // ============================================
-function showBuyTicketModal(matchTitle, matchDate) {
+function showBuyTicketModal(matchUuid, matchTitle) {
     document.getElementById('buy-match-title').textContent = matchTitle;
-    document.getElementById('buy-match-date').value = matchDate;
+    document.getElementById('buy-match-uuid').value = matchUuid;
     document.getElementById('ticket-category').value = 'regular';
     updatePriceDisplay();
     openModal('buyTicketModal');
@@ -496,13 +525,11 @@ function handleRegisterSubmit(event) {
 
 function handleBuyTicketSubmit(event) {
     event.preventDefault();
-    const matchTitle = document.getElementById('buy-match-title').textContent;
-    const matchDate = document.getElementById('buy-match-date').value;
+    const matchUuid = document.getElementById('buy-match-uuid').value;
     const select = document.getElementById('ticket-category');
     const category = select.value;
-    const price = parseInt(select.options[select.selectedIndex].dataset.price);
     
-    purchaseTicket(matchTitle, matchDate, category, price);
+    purchaseTicket(matchUuid, category);
     closeModal('buyTicketModal');
 }
 

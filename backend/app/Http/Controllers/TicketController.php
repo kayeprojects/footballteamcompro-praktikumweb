@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\FootballMatch;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -12,7 +13,7 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
-        $query = auth()->user()->tickets();
+        $query = auth()->user()->tickets()->with('match');
 
         // Filter by status
         if ($request->has('status')) {
@@ -41,35 +42,81 @@ class TicketController extends Controller
 
     /**
      * Store a newly created ticket.
+     * Business Logic: Decrements match available_seats when ticket is purchased.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'match_title' => 'required|string|max:255',
-            'match_date' => 'required|date|after:now',
-            'seat_number' => 'nullable|string|max:50',
+            'match_uuid' => 'required|exists:matches,uuid',
             'category' => 'required|in:vip,premium,regular,economy',
-            'price' => 'required|numeric|min:0',
         ]);
 
-        $validated['user_id'] = auth()->id();
-        $validated['status'] = 'pending';
+        // Find the match by UUID
+        $match = FootballMatch::where('uuid', $validated['match_uuid'])->first();
 
-        $ticket = Ticket::create($validated);
+        if (!$match) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Match not found'
+            ], 404);
+        }
+
+        // Check if match is upcoming
+        if ($match->status !== 'upcoming') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Cannot purchase tickets for this match'
+            ], 400);
+        }
+
+        // Check available seats
+        if (!$match->hasAvailableSeats()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No seats available for this match'
+            ], 400);
+        }
+
+        // Calculate price based on category
+        $prices = [
+            'vip' => 2500000,
+            'premium' => 1500000,
+            'regular' => 750000,
+            'economy' => 350000,
+        ];
+
+        // Generate seat number
+        $seatSection = strtoupper(substr($validated['category'], 0, 1)); // V, P, R, E
+        $seatNumber = $seatSection . rand(1, 50) . '-' . rand(1, 30);
+
+        // Create ticket
+        $ticket = Ticket::create([
+            'user_id' => auth()->id(),
+            'match_id' => $match->id,
+            'match_title' => $match->title,
+            'match_date' => $match->match_date,
+            'seat_number' => $seatNumber,
+            'category' => $validated['category'],
+            'price' => $prices[$validated['category']],
+            'status' => 'pending',
+        ]);
+
+        // *** BUSINESS LOGIC: Decrement available seats ***
+        $match->decrementSeats();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Ticket purchased successfully',
-            'data' => $ticket
+            'data' => $ticket->load('match')
         ], 201);
     }
 
     /**
      * Display the specified ticket.
      */
-    public function show(string $id)
+    public function show(string $uuid)
     {
-        $ticket = auth()->user()->tickets()->find($id);
+        $ticket = auth()->user()->tickets()->with('match')->where('uuid', $uuid)->first();
 
         if (!$ticket) {
             return response()->json([
@@ -87,9 +134,9 @@ class TicketController extends Controller
     /**
      * Update the specified ticket.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $uuid)
     {
-        $ticket = auth()->user()->tickets()->find($id);
+        $ticket = auth()->user()->tickets()->where('uuid', $uuid)->first();
 
         if (!$ticket) {
             return response()->json([
@@ -107,13 +154,20 @@ class TicketController extends Controller
         }
 
         $validated = $request->validate([
-            'match_title' => 'sometimes|string|max:255',
-            'match_date' => 'sometimes|date|after:now',
             'seat_number' => 'nullable|string|max:50',
             'category' => 'sometimes|in:vip,premium,regular,economy',
-            'price' => 'sometimes|numeric|min:0',
-            'status' => 'sometimes|in:pending,active,cancelled',
         ]);
+
+        // Recalculate price if category changed
+        if (isset($validated['category'])) {
+            $prices = [
+                'vip' => 2500000,
+                'premium' => 1500000,
+                'regular' => 750000,
+                'economy' => 350000,
+            ];
+            $validated['price'] = $prices[$validated['category']];
+        }
 
         $ticket->update($validated);
 
@@ -126,10 +180,11 @@ class TicketController extends Controller
 
     /**
      * Remove the specified ticket (cancel).
+     * Business Logic: Increments match available_seats when ticket is cancelled.
      */
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        $ticket = auth()->user()->tickets()->find($id);
+        $ticket = auth()->user()->tickets()->with('match')->where('uuid', $uuid)->first();
 
         if (!$ticket) {
             return response()->json([
@@ -146,6 +201,11 @@ class TicketController extends Controller
             ], 400);
         }
 
+        // *** BUSINESS LOGIC: Increment available seats ***
+        if ($ticket->match) {
+            $ticket->match->incrementSeats();
+        }
+
         $ticket->update(['status' => 'cancelled']);
 
         return response()->json([
@@ -155,11 +215,11 @@ class TicketController extends Controller
     }
 
     /**
-     * Confirm/activate a pending ticket (admin or payment callback).
+     * Confirm/activate a pending ticket.
      */
-    public function confirm(string $id)
+    public function confirm(string $uuid)
     {
-        $ticket = auth()->user()->tickets()->find($id);
+        $ticket = auth()->user()->tickets()->where('uuid', $uuid)->first();
 
         if (!$ticket) {
             return response()->json([

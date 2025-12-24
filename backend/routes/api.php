@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\MatchController;
 use App\Http\Controllers\FootballApiController;
 
 /*
@@ -55,18 +56,29 @@ Route::prefix('football')->group(function () {
 Route::get('/news', [FootballApiController::class, 'getNews']);
 
 // ============================================
-// TICKET ROUTES
+// MATCH ROUTES (Using UUID as identifier)
 // ============================================
-// Public: View available tickets info (optional, based on requirements)
-// Route::get('/tickets/available', [TicketController::class, 'available']);
+// Public: View matches
+Route::get('/matches', [MatchController::class, 'index']);
+Route::get('/matches/{uuid}', [MatchController::class, 'show']);
 
+// Protected: Manage matches (JWT Required)
+Route::middleware('auth:api')->group(function () {
+    Route::post('/matches', [MatchController::class, 'store']);
+    Route::put('/matches/{uuid}', [MatchController::class, 'update']);
+    Route::delete('/matches/{uuid}', [MatchController::class, 'destroy']);
+    Route::get('/matches/{uuid}/tickets', [MatchController::class, 'tickets']);
+});
+
+// ============================================
+// TICKET ROUTES (Using UUID as identifier)
+// ============================================
 // Protected: User's ticket management (JWT Required)
 Route::middleware('auth:api')->group(function () {
     Route::get('/tickets', [TicketController::class, 'index']);
     Route::post('/tickets', [TicketController::class, 'store']);
-    Route::get('/tickets/{id}', [TicketController::class, 'show']);
-    Route::put('/tickets/{id}', [TicketController::class, 'update']);
-    Route::post('/tickets/{id}', [TicketController::class, 'update']); // For form-data with _method=PUT
-    Route::delete('/tickets/{id}', [TicketController::class, 'destroy']);
-    Route::post('/tickets/{id}/confirm', [TicketController::class, 'confirm']);
+    Route::get('/tickets/{uuid}', [TicketController::class, 'show']);
+    Route::put('/tickets/{uuid}', [TicketController::class, 'update']);
+    Route::delete('/tickets/{uuid}', [TicketController::class, 'destroy']);
+    Route::post('/tickets/{uuid}/confirm', [TicketController::class, 'confirm']);
 });
