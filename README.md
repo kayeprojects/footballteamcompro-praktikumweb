@@ -529,7 +529,7 @@ This project is created for educational purposes as part of a Web Programming co
 
 ## 👤 Author
 
-**Rifky** - Web Programming Final Project 2024
+**Rifky** - Web Programming Final Project 2025
 
 ---
 
